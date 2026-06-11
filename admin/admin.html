@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel – Undangan Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0F1117;
+  --surface:#181B23;
+  --surface2:#1E2230;
+  --border:#2A2F3F;
+  --border2:#353B50;
+  --gold:#C9A96E;
+  --gold-dim:#8B6B3D;
+  --gold-bg:rgba(201,169,110,0.08);
+  --text:#E8E6E1;
+  --text2:#9A96A0;
+  --text3:#5A5760;
+  --green:#3DD68C;
+  --green-bg:rgba(61,214,140,0.1);
+  --red:#E85D6A;
+  --red-bg:rgba(232,93,106,0.1);
+  --blue:#4F9CF9;
+  --blue-bg:rgba(79,156,249,0.1);
+  --amber:#F5A623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --sidebar:220px;
+  --font:'Inter',sans-serif;
+  --radius:8px;
+  --radius-lg:12px;
+}
+
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;display:flex}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  width:var(--sidebar);min-width:var(--sidebar);
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  height:100vh;overflow-y:auto;
+  flex-shrink:0;
+}
+
+.sidebar-logo{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+
+.logo-mark{
+  width:32px;height:32px;
+  background:var(--gold-bg);
+  border:1px solid rgba(201,169,110,0.3);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--gold);
+  font-family:Georgia,serif;font-style:italic;
+}
+
+.logo-text{font-size:13px;font-weight:600;color:var(--text);letter-spacing:0.3px}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
+
+.sidebar-section{padding:20px 12px 8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:var(--radius);
+  cursor:pointer;color:var(--text2);font-size:13px;
+  transition:background 0.15s,color 0.15s;
+  margin:1px 8px;
+}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--gold-bg);color:var(--gold)}
+.nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{
+  margin-left:auto;
+  background:var(--gold-bg);color:var(--gold);
+  font-size:10px;padding:2px 7px;border-radius:10px;
+  font-weight:500;
+}
+
+.sidebar-footer{
+  margin-top:auto;padding:16px 12px;
+  border-top:1px solid var(--border);
+}
+.admin-info{display:flex;align-items:center;gap:10px}
+.admin-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--gold-bg);border:1px solid rgba(201,169,110,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--gold);font-weight:600;
+}
+.admin-name{font-size:13px;font-weight:500}
+.admin-role{font-size:11px;color:var(--text3)}
+
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── TOPBAR ── */
+#topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:56px;
+  display:flex;align-items:center;gap:16px;
+  flex-shrink:0;
+}
+.page-title{font-size:16px;font-weight:600;color:var(--text);flex:1}
+.topbar-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius);padding:6px 12px;
+  width:220px;
+}
+.topbar-search input{
+  background:none;border:none;outline:none;
+  color:var(--text);font-size:13px;font-family:var(--font);width:100%;
+}
+.topbar-search input::placeholder{color:var(--text3)}
+.search-icon{color:var(--text3);font-size:14px}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:var(--radius);
+  font-size:13px;font-weight:500;cursor:pointer;
+  font-family:var(--font);border:none;transition:all 0.15s;
+}
+.btn-primary{background:var(--gold);color:#0F1117}
+.btn-primary:hover{background:#D4B47E}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid transparent}
+.btn-danger:hover{border-color:var(--red)}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow-y:auto;padding:24px}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;
+}
+.stat-label{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:600;color:var(--text);line-height:1;margin-bottom:6px}
+.stat-delta{font-size:12px;color:var(--text3)}
+.stat-delta span{font-weight:500}
+.stat-delta .up{color:var(--green)}
+.stat-delta .dn{color:var(--red)}
+.stat-accent-gold .stat-value{color:var(--gold)}
+
+/* ── TABLE ── */
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.table-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.table-title{font-size:14px;font-weight:600;flex:1}
+.filter-tabs{display:flex;gap:4px}
+.filter-tab{
+  padding:5px 12px;border-radius:6px;font-size:12px;
+  cursor:pointer;color:var(--text2);background:transparent;
+  border:none;font-family:var(--font);transition:all 0.15s;
+}
+.filter-tab.active{background:var(--gold-bg);color:var(--gold)}
+.filter-tab:hover:not(.active){background:var(--surface2);color:var(--text)}
+
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+th{
+  padding:10px 16px;text-align:left;
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text3);font-weight:500;white-space:nowrap;
+}
+td{
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  font-size:13px;vertical-align:middle;
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+
+.couple-cell{display:flex;align-items:center;gap:10px}
+.couple-initials{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--gold-bg);border:1px solid rgba(201,169,110,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--gold);font-weight:600;flex-shrink:0;
+}
+.couple-name{font-weight:500;color:var(--text)}
+.couple-slug{font-size:11px;color:var(--text3);margin-top:2px}
+
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;
+}
+.status-badge::before{content:'';width:5px;height:5px;border-radius:50%}
+.badge-active{background:var(--green-bg);color:var(--green)}
+.badge-active::before{background:var(--green)}
+.badge-draft{background:var(--amber-bg);color:var(--amber)}
+.badge-draft::before{background:var(--amber)}
+.badge-expired{background:var(--border);color:var(--text3)}
+.badge-expired::before{background:var(--text3)}
+
+.pkg-badge{
+  padding:3px 8px;border-radius:4px;font-size:11px;font-weight:500;
+}
+.pkg-basic{background:var(--blue-bg);color:var(--blue)}
+.pkg-premium{background:var(--gold-bg);color:var(--gold)}
+.pkg-vip{background:rgba(161,71,255,0.12);color:#B06EFF}
+
+.action-btns{display:flex;gap:6px;align-items:center}
+.icon-btn{
+  width:30px;height:30px;border-radius:6px;border:1px solid var(--border);
+  background:transparent;cursor:pointer;color:var(--text2);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all 0.15s;
+}
+.icon-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
+
+.link-cell{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;padding:5px 10px;max-width:220px;
+}
+.link-text{
+  font-size:11px;color:var(--text3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;
+  font-family:monospace;
+}
+.copy-btn{
+  background:none;border:none;cursor:pointer;color:var(--text3);font-size:12px;
+  padding:0;flex-shrink:0;transition:color 0.15s;
+}
+.copy-btn:hover{color:var(--gold)}
+
+/* ── MODAL ── */
+#modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+#modal-overlay.open{display:flex}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);width:100%;max-width:680px;
+  max-height:90vh;overflow-y:auto;
+  animation:modal-in 0.2s ease;
+}
+@keyframes modal-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.modal-header{
+  padding:20px 24px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:var(--surface);z-index:1;
+}
+.modal-title{font-size:16px;font-weight:600}
+.modal-close{
+  width:32px;height:32px;border-radius:6px;border:1px solid var(--border);
+  background:none;cursor:pointer;color:var(--text2);font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+}
+.modal-close:hover{background:var(--surface2);color:var(--text)}
+.modal-body{padding:24px}
+.modal-footer{
+  padding:16px 24px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;
+}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:12px;font-weight:500;color:var(--text2)}
+.form-input,.form-select,.form-textarea{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius);color:var(--text);
+  font-family:var(--font);font-size:13px;
+  padding:9px 12px;outline:none;transition:border-color 0.15s;
+  width:100%;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--text3)}
+.form-select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235A5760' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+}
+.form-select option{background:var(--surface)}
+.form-textarea{resize:vertical;min-height:80px}
+.form-hint{font-size:11px;color:var(--text3);margin-top:2px}
+.section-divider{
+  grid-column:1/-1;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);padding:8px 0 4px;
+  border-top:1px solid var(--border);margin-top:8px;
+}
+
+/* ── PREVIEW LINK ── */
+.preview-box{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius);padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  grid-column:1/-1;
+}
+.preview-url{font-size:12px;color:var(--gold);font-family:monospace;flex:1;word-break:break-all}
+.preview-label{font-size:11px;color:var(--text3);white-space:nowrap}
+
+/* ── RSVP PAGE ── */
+.rsvp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+
+.rsvp-bar{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;margin-bottom:24px;
+}
+.rsvp-bar-label{font-size:12px;color:var(--text2);margin-bottom:10px;display:flex;justify-content:space-between}
+.bar-track{background:var(--bg);border-radius:4px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width 0.5s ease}
+
+/* ── GUEST CARDS ── */
+.guest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.guest-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:16px;
+}
+.guest-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.guest-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface2);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:var(--text2);flex-shrink:0;
+}
+.guest-name-big{font-size:14px;font-weight:500}
+.guest-couple{font-size:11px;color:var(--text3);margin-top:2px}
+.guest-card-body{font-size:13px;color:var(--text2);line-height:1.6;font-style:italic;border-left:2px solid var(--border);padding-left:10px}
+.guest-card-footer{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--text3)}
+
+/* ── SETTINGS PAGE ── */
+.settings-grid{display:grid;grid-template-columns:240px 1fr;gap:24px;align-start:start}
+.settings-nav{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.settings-nav-item{
+  padding:12px 16px;cursor:pointer;font-size:13px;color:var(--text2);
+  border-bottom:1px solid var(--border);transition:all 0.15s;display:flex;align-items:center;gap:8px;
+}
+.settings-nav-item:last-child{border-bottom:none}
+.settings-nav-item.active{color:var(--gold);background:var(--gold-bg)}
+.settings-nav-item:hover:not(.active){background:var(--surface2);color:var(--text)}
+
+.settings-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px}
+.settings-section-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.settings-section-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:12px 16px;
+  font-size:13px;color:var(--text);
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  z-index:500;opacity:0;transform:translateY(8px);
+  transition:all 0.25s;pointer-events:none;
+  display:flex;align-items:center;gap:10px;
+}
+#toast.show{opacity:1;transform:none}
+.toast-icon{font-size:16px}
+
+/* ── EMPTY STATE ── */
+.empty-state{
+  padding:64px 24px;text-align:center;
+}
+.empty-icon{font-size:40px;margin-bottom:16px;opacity:0.3}
+.empty-title{font-size:16px;font-weight:500;color:var(--text2);margin-bottom:8px}
+.empty-sub{font-size:13px;color:var(--text3)}
+
+/* ── OVERVIEW CHARTS ── */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.mini-chart{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;
+}
+.mini-chart-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.mini-chart-sub{font-size:12px;color:var(--text3);margin-bottom:16px}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-fill-col{
+  width:100%;border-radius:4px 4px 0 0;
+  background:var(--gold-bg);border-top:2px solid var(--gold);
+  min-height:4px;transition:height 0.5s ease;
+}
+.bar-lbl{font-size:10px;color:var(--text3)}
+
+.donut-row{display:flex;gap:16px;align-items:center}
+.donut-svg{flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  #sidebar{width:56px;min-width:56px}
+  .logo-text,.logo-sub,.nav-item span,.nav-badge,.sidebar-footer .admin-name,.sidebar-footer .admin-role,.sidebar-section{display:none}
+  .nav-item{justify-content:center;padding:10px}
+  .nav-icon{width:auto}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .chart-row{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">U</div>
+    <div>
+      <div class="logo-text">Undangan Digital</div>
+      <div class="logo-sub">Admin Panel</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Menu</div>
+  <div class="nav-item active" onclick="showPage('overview')">
+    <span class="nav-icon">📊</span><span>Overview</span>
+  </div>
+  <div class="nav-item" onclick="showPage('invitations')">
+    <span class="nav-icon">💌</span><span>Undangan</span>
+    <span class="nav-badge" id="inv-badge">4</span>
+  </div>
+  <div class="nav-item" onclick="showPage('rsvp')">
+    <span class="nav-icon">👥</span><span>RSVP &amp; Tamu</span>
+  </div>
+  <div class="nav-item" onclick="showPage('orders')">
+    <span class="nav-icon">📦</span><span>Pesanan</span>
+    <span class="nav-badge" id="order-badge">2</span>
+  </div>
+
+ 
+
+  <div class="sidebar-section">Lainnya</div>
+  <div class="nav-item" onclick="showPage('templates')">
+    <span class="nav-icon">🎨</span><span>Template</span>
+  </div>
+  <div class="nav-item" onclick="showPage('settings')">
+    <span class="nav-icon">⚙️</span><span>Pengaturan</span>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="admin-info">
+      <div class="admin-avatar">AD</div>
+      <div>
+        <div class="admin-name">Admin</div>
+        <div class="admin-role">Super Admin</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div class="page-title" id="page-title">Overview</div>
+    <div class="topbar-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Cari undangan..." id="search-input" oninput="filterTable()">
+    </div>
+    <button class="btn btn-primary" onclick="openModal('create')">+ Buat Undangan</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- ── PAGE: OVERVIEW ── -->
+    <div class="page active" id="page-overview">
+      <div class="stats-row">
+        <div class="stat-card stat-accent-gold">
+          <div class="stat-label">Total Undangan</div>
+          <div class="stat-value" id="stat-total">4</div>
+          <div class="stat-delta">Aktif: <span id="stat-active-count" class="up">3</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total RSVP</div>
+          <div class="stat-value" id="stat-rsvp">47</div>
+          <div class="stat-delta">Hadir: <span class="up" id="stat-hadir">38</span> · Tidak: <span class="dn" id="stat-tidak">9</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pendapatan</div>
+          <div class="stat-value">Rp 850K</div>
+          <div class="stat-delta">Bulan ini: <span class="up">+Rp 250K</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Link Dibuka</div>
+          <div class="stat-value">312</div>
+          <div class="stat-delta">7 hari terakhir: <span class="up">+89</span></div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="mini-chart">
+          <div class="mini-chart-title">RSVP per Undangan</div>
+          <div class="mini-chart-sub">Jumlah tamu yang konfirmasi</div>
+          <div class="bar-chart" id="rsvp-bars"></div>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-chart-title">Status Undangan</div>
+          <div class="mini-chart-sub">Distribusi paket aktif</div>
+          <div class="donut-row">
+            <svg class="donut-svg" width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="28" fill="none" stroke="#1E2230" stroke-width="14"/>
+              <circle cx="40" cy="40" r="28" fill="none" stroke="#C9A96E" stroke-width="14"
+                stroke-dasharray="52.8 123.2" stroke-dashoffset="35" stroke-linecap="butt"/>
+              <circle cx="40" cy="40" r="28" fill="none" stroke="#4F9CF9" stroke-width="14"
+                stroke-dasharray="35.2 140.8" stroke-dashoffset="-17.8" stroke-linecap="butt"/>
+              <circle cx="40" cy="40" r="28" fill="none" stroke="#B06EFF" stroke-width="14"
+                stroke-dasharray="17.6 158.4" stroke-dashoffset="-53" stroke-linecap="butt"/>
+              <text x="40" y="44" text-anchor="middle" font-size="13" fill="#E8E6E1" font-weight="600" font-family="Inter,sans-serif">3</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#C9A96E"></div>Premium (1)</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#4F9CF9"></div>Basic (2)</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#B06EFF"></div>VIP (1)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Undangan Terbaru</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('invitations')">Lihat Semua →</button>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Pasangan</th><th>Tanggal Nikah</th><th>Paket</th><th>RSVP</th><th>Status</th>
+          </tr></thead>
+          <tbody id="overview-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE: INVITATIONS ── -->
+    <div class="page" id="page-invitations">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Semua Undangan</div>
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterStatus('all',this)">Semua</button>
+            <button class="filter-tab" onclick="filterStatus('active',this)">Aktif</button>
+            <button class="filter-tab" onclick="filterStatus('draft',this)">Draft</button>
+            <button class="filter-tab" onclick="filterStatus('expired',this)">Kadaluarsa</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Pasangan</th>
+            <th>Link Undangan</th>
+            <th>Tanggal Nikah</th>
+            <th>Paket</th>
+            <th>RSVP</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr></thead>
+          <tbody id="inv-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE: RSVP ── -->
+    <div class="page" id="page-rsvp">
+      <div class="rsvp-stats">
+        <div class="stat-card">
+          <div class="stat-label">Total Tamu</div>
+          <div class="stat-value" id="rsvp-total">47</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Hadir</div>
+          <div class="stat-value" style="color:var(--green)" id="rsvp-hadir">38</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tidak Hadir</div>
+          <div class="stat-value" style="color:var(--red)" id="rsvp-tidak">9</div>
+        </div>
+      </div>
+
+      <div class="rsvp-bar">
+        <div class="rsvp-bar-label">
+          <span>Tingkat Kehadiran</span>
+          <span id="rsvp-pct" style="color:var(--green);font-weight:500">81%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="rsvp-bar-fill" style="width:81%"></div></div>
+      </div>
+
+      <div class="table-card" style="margin-bottom:24px">
+        <div class="table-header">
+          <div class="table-title">Daftar Tamu</div>
+          <button class="btn btn-ghost btn-sm" onclick="exportRsvp()">⬇ Export CSV</button>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Nama Tamu</th><th>Undangan</th><th>Kehadiran</th><th>Jumlah</th><th>Pesan</th><th>Waktu</th>
+          </tr></thead>
+          <tbody id="rsvp-table"></tbody>
+        </table>
+      </div>
+
+      <div style="font-size:12px;color:var(--text3);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase">Ucapan Tamu</div>
+      <div class="guest-grid" id="wish-cards"></div>
+    </div>
+
+    <!-- ── PAGE: ORDERS ── -->
+    <div class="page" id="page-orders">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Pesanan Masuk</div>
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterOrder('all',this)">Semua</button>
+            <button class="filter-tab" onclick="filterOrder('new',this)">Baru</button>
+            <button class="filter-tab" onclick="filterOrder('process',this)">Diproses</button>
+            <button class="filter-tab" onclick="filterOrder('done',this)">Selesai</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>No. Order</th><th>Pelanggan</th><th>Paket</th><th>Harga</th><th>Status</th><th>Tanggal</th><th>Aksi</th>
+          </tr></thead>
+          <tbody id="order-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE: TEMPLATES ── -->
+    <div class="page" id="page-templates">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
+        <!-- Template cards rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ── PAGE: SETTINGS ── -->
+    <div class="page" id="page-settings">
+      <div class="settings-grid">
+        <div class="settings-nav">
+          <div class="settings-nav-item active" onclick="showSettingsPanel('brand',this)">🎨 <span>Branding</span></div>
+          <div class="settings-nav-item" onclick="showSettingsPanel('domain',this)">🔗 <span>Domain</span></div>
+          <div class="settings-nav-item" onclick="showSettingsPanel('pricing',this)">💰 <span>Harga Paket</span></div>
+          <div class="settings-nav-item" onclick="showSettingsPanel('notif',this)">🔔 <span>Notifikasi</span></div>
+          <div class="settings-nav-item" onclick="showSettingsPanel('account',this)">👤 <span>Akun Admin</span></div>
+        </div>
+        <div>
+          <div class="settings-panel" id="settings-brand">
+            <div class="settings-section-title">Branding</div>
+            <div class="settings-section-sub">Nama brand dan tampilan bisnis Anda</div>
+            <div style="display:grid;gap:16px">
+              <div class="form-group"><label class="form-label">Nama Brand</label><input type="text" class="form-input" value="Undangan Digital"></div>
+              <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-input" value="Undangan Cantik, Harga Terjangkau"></div>
+              <div class="form-group"><label class="form-label">WhatsApp CS</label><input type="text" class="form-input" placeholder="628xxxxxxxxxx"></div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="admin@domain.com"></div>
+              <div class="form-group"><label class="form-label">Footer Credit</label><input type="text" class="form-input" value="Made with ♥ by Undangan Digital"></div>
+              <button class="btn btn-primary" style="width:fit-content">Simpan Perubahan</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="settings-domain" style="display:none">
+            <div class="settings-section-title">Pengaturan Domain</div>
+            <div class="settings-section-sub">Domain utama untuk link undangan</div>
+            <div style="display:grid;gap:16px">
+              <div class="form-group"><label class="form-label">Base URL</label><input type="text" class="form-input" value="https://undanganku.id"></div>
+              <div class="form-group"><label class="form-label">Format Slug</label>
+                <select class="form-select"><option>nama-mempelai (anisa-surya)</option><option>kode-unik (INV-0041)</option></select>
+              </div>
+              <div class="form-group"><label class="form-label">Contoh Link</label>
+                <div class="preview-box" style="grid-column:1"><span class="preview-url">https://undanganku.id/anisa-surya?to=Nama+Tamu</span></div>
+              </div>
+              <button class="btn btn-primary" style="width:fit-content">Simpan</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="settings-pricing" style="display:none">
+            <div class="settings-section-title">Harga Paket</div>
+            <div class="settings-section-sub">Atur harga jual tiap paket</div>
+            <div style="display:grid;gap:16px">
+              <div class="form-group"><label class="form-label">Paket Basic</label><input type="text" class="form-input" value="Rp 75.000"></div>
+              <div class="form-group"><label class="form-label">Paket Premium</label><input type="text" class="form-input" value="Rp 150.000"></div>
+              <div class="form-group"><label class="form-label">Paket VIP</label><input type="text" class="form-input" value="Rp 299.000"></div>
+              <button class="btn btn-primary" style="width:fit-content">Simpan</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="settings-notif" style="display:none">
+            <div class="settings-section-title">Notifikasi</div>
+            <div class="settings-section-sub">Notifikasi otomatis via WhatsApp</div>
+            <div style="display:grid;gap:16px">
+              <div class="form-group"><label class="form-label">WA API Token</label><input type="password" class="form-input" placeholder="Token Fonnte / WA Gateway"></div>
+              <div class="form-group"><label class="form-label">Pesan ke Pembeli (saat link jadi)</label><textarea class="form-textarea">Halo {nama}, undangan digital Anda sudah siap! 🎉 Klik link berikut: {link}</textarea></div>
+              <button class="btn btn-primary" style="width:fit-content">Simpan</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="settings-account" style="display:none">
+            <div class="settings-section-title">Akun Admin</div>
+            <div class="settings-section-sub">Ganti password login</div>
+            <div style="display:grid;gap:16px">
+              <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" value="admin"></div>
+              <div class="form-group"><label class="form-label">Password Baru</label><input type="password" class="form-input" placeholder="Min. 8 karakter"></div>
+              <div class="form-group"><label class="form-label">Konfirmasi Password</label><input type="password" class="form-input" placeholder="Ulangi password"></div>
+              <button class="btn btn-primary" style="width:fit-content">Ganti Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- MODAL CREATE/EDIT -->
+<div id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Buat Undangan Baru</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" id="modal-form">
+
+        <div class="section-divider">Data Mempelai Wanita</div>
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-input" id="f-bride" placeholder="Anisa Ayuningtyas, S.Pd">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Panggilan</label>
+          <input type="text" class="form-input" id="f-bride-nick" placeholder="Anisa">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Ayah</label>
+          <input type="text" class="form-input" id="f-bride-dad" placeholder="Bapak Nasrudin">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Ibu</label>
+          <input type="text" class="form-input" id="f-bride-mom" placeholder="Ibu Elma">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instagram</label>
+          <input type="text" class="form-input" id="f-bride-ig" placeholder="@anisa_username">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Link Foto Mempelai Wanita</label>
+          <input type="text" class="form-input" id="f-bride-photo" placeholder="https://...">
+        </div>
+
+        <div class="section-divider">Data Mempelai Pria</div>
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-input" id="f-groom" placeholder="Syahril Rendra Bakhtiar">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Panggilan</label>
+          <input type="text" class="form-input" id="f-groom-nick" placeholder="Syahril">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Ayah</label>
+          <input type="text" class="form-input" id="f-groom-dad" placeholder="Bapak Sufian">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Ibu</label>
+          <input type="text" class="form-input" id="f-groom-mom" placeholder="Ibu Elmira">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instagram</label>
+          <input type="text" class="form-input" id="f-groom-ig" placeholder="@syahril_username">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Link Foto Mempelai Pria</label>
+          <input type="text" class="form-input" id="f-groom-photo" placeholder="https://...">
+        </div>
+
+        <div class="section-divider">Acara</div>
+        <div class="form-group">
+          <label class="form-label">Tanggal Akad</label>
+          <input type="date" class="form-input" id="f-akad-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Waktu Akad</label>
+          <input type="text" class="form-input" id="f-akad-time" placeholder="09.00 – 10.00 WIB">
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Lokasi Akad</label>
+          <input type="text" class="form-input" id="f-akad-venue" placeholder="Kediaman Mempelai Wanita, Jl. ...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal Resepsi</label>
+          <input type="date" class="form-input" id="f-resepsi-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Waktu Resepsi</label>
+          <input type="text" class="form-input" id="f-resepsi-time" placeholder="11.00 – 14.00 WIB">
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Lokasi Resepsi</label>
+          <input type="text" class="form-input" id="f-resepsi-venue" placeholder="Gedung ..., Jl. ...">
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Link Google Maps</label>
+          <input type="text" class="form-input" id="f-maps" placeholder="https://maps.google.com/...">
+        </div>
+
+        <div class="section-divider">Keuangan & Paket</div>
+        <div class="form-group">
+          <label class="form-label">Paket</label>
+          <select class="form-select" id="f-package" onchange="updatePreview()">
+            <option value="basic">Basic – Rp 75.000</option>
+            <option value="premium">Premium – Rp 150.000</option>
+            <option value="vip">VIP – Rp 299.000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">No. Rekening Hadiah</label>
+          <input type="text" class="form-input" id="f-rekening" placeholder="123 456 789 0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Pemilik Rekening</label>
+          <input type="text" class="form-input" id="f-rek-name" placeholder="a.n Anisa Ayuningtyas">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Link Musik (MP3)</label>
+          <input type="text" class="form-input" id="f-music" placeholder="https://... .mp3">
+        </div>
+
+        <div class="section-divider">Link & Template</div>
+        <div class="form-group">
+          <label class="form-label">Slug URL</label>
+          <input type="text" class="form-input" id="f-slug" placeholder="anisa-surya" oninput="updatePreview()">
+          <div class="form-hint">Huruf kecil, tanpa spasi. Contoh: anisa-surya</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Template</label>
+          <select class="form-select" id="f-template">
+            <option>Motion Art (Gold Dark)</option>
+            <option>Garden Floral (Light)</option>
+            <option>Minimalist White</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Preview Link</label>
+          <div class="preview-box">
+            <span class="preview-label">URL:</span>
+            <span class="preview-url" id="preview-url">https://undanganku.id/<em>slug</em>?to=Nama+Tamu</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-ghost" onclick="saveInvitation('draft')">Simpan Draft</button>
+      <button class="btn btn-primary" onclick="saveInvitation('active')">✓ Aktifkan &amp; Buat Link</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span class="toast-icon" id="toast-icon">✓</span><span id="toast-msg"></span></div>
+
+<script>
+// ── DATA ──
+const BASE_URL = 'https://undanganku.id';
+
+let invitations = [
+  {id:1, bride:'Anisa Ayuningtyas', groom:'Syahril Rendra', slug:'anisa-syahril', weddingDate:'2025-12-28', package:'premium', status:'active', rsvp:18, views:142, createdAt:'2025-11-01'},
+  {id:2, bride:'Dewi Rahayu', groom:'Budi Santoso', slug:'dewi-budi', weddingDate:'2025-12-14', package:'basic', status:'active', rsvp:12, views:87, createdAt:'2025-10-22'},
+  {id:3, bride:'Sinta Melati', groom:'Arif Wijaya', slug:'sinta-arif', weddingDate:'2025-11-30', package:'vip', status:'expired', rsvp:9, views:203, createdAt:'2025-09-15'},
+  {id:4, bride:'Putri Handayani', groom:'Reza Firmansyah', slug:'putri-reza', weddingDate:'2026-01-18', package:'basic', status:'draft', rsvp:8, views:31, createdAt:'2025-11-10'},
+];
+
+let rsvpData = [
+  {name:'Budi Santoso', couple:'Anisa & Syahril', hadir:true, count:2, wish:'Selamat menempuh hidup baru! Semoga sakinah mawaddah warahmah.', time:'2025-11-12 14:23'},
+  {name:'Dewi Anggraini', couple:'Anisa & Syahril', hadir:true, count:1, wish:'Barakallah! Semoga pernikahan ini penuh keberkahan.', time:'2025-11-13 09:11'},
+  {name:'Pak Hendra', couple:'Dewi & Budi', hadir:false, count:0, wish:'Maaf tidak bisa hadir, semoga lancar acaranya!', time:'2025-11-14 16:45'},
+  {name:'Keluarga Santoso', couple:'Anisa & Syahril', hadir:true, count:4, wish:'', time:'2025-11-15 11:02'},
+  {name:'Sari Utami', couple:'Dewi & Budi', hadir:true, count:2, wish:'Selamat ya! Semoga bahagia selalu.', time:'2025-11-16 08:30'},
+  {name:'Ahmad Fauzi', couple:'Sinta & Arif', hadir:true, count:1, wish:'Masyaallah, semoga jadi keluarga yang sakinah.', time:'2025-10-20 13:55'},
+];
+
+let orders = [
+  {id:'ORD-001', customer:'Fitria Ramadhani', phone:'08111234567', package:'premium', price:'Rp 150.000', status:'done', date:'2025-11-01'},
+  {id:'ORD-002', customer:'Yusuf Hakim', phone:'08222345678', package:'basic', price:'Rp 75.000', status:'done', date:'2025-10-22'},
+  {id:'ORD-003', customer:'Nanda Pratiwi', phone:'08333456789', package:'vip', price:'Rp 299.000', status:'process', date:'2025-11-09'},
+  {id:'ORD-004', customer:'Rizky Maulana', phone:'08444567890', package:'basic', price:'Rp 75.000', status:'new', date:'2025-11-11'},
+];
+
+let currentFilter = 'all';
+let currentOrderFilter = 'all';
+let editingId = null;
+
+// ── NAV ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const titles = {overview:'Overview',invitations:'Semua Undangan',rsvp:'RSVP & Tamu',orders:'Pesanan Masuk',blast:'WA Blast',templates:'Template',settings:'Pengaturan'};
+  document.getElementById('page-title').textContent = titles[name]||name;
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(n=>{ if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'")) n.classList.add('active'); });
+  if(name==='invitations') renderInvitations();
+  if(name==='rsvp') renderRsvp();
+  if(name==='orders') renderOrders();
+  if(name==='overview') renderOverview();
+  if(name==='templates') renderTemplates();
+  if(name==='blast') renderBlast();
+}
+
+// ── OVERVIEW ──
+function renderOverview() {
+  const active = invitations.filter(i=>i.status==='active').length;
+  const totalRsvp = rsvpData.length;
+  const hadir = rsvpData.filter(r=>r.hadir).length;
+  const tidak = totalRsvp - hadir;
+  document.getElementById('stat-total').textContent = invitations.length;
+  document.getElementById('stat-active-count').textContent = active;
+  document.getElementById('stat-rsvp').textContent = totalRsvp;
+  document.getElementById('stat-hadir').textContent = hadir;
+  document.getElementById('stat-tidak').textContent = tidak;
+  document.getElementById('inv-badge').textContent = invitations.length;
+
+  // bar chart
+  const barsEl = document.getElementById('rsvp-bars');
+  const max = Math.max(...invitations.map(i=>i.rsvp),1);
+  barsEl.innerHTML = invitations.map(i=>`
+    <div class="bar-col">
+      <div class="bar-fill-col" style="height:${Math.round((i.rsvp/max)*72)+4}px"></div>
+      <div class="bar-lbl">${i.bride.split(' ')[0]}</div>
+    </div>
+  `).join('');
+
+  // overview table (last 3)
+  const tbody = document.getElementById('overview-table');
+  tbody.innerHTML = invitations.slice(0,3).map(i=>overviewRow(i)).join('');
+}
+
+function overviewRow(i) {
+  return `<tr>
+    <td><div class="couple-cell"><div class="couple-initials">${i.bride[0]}${i.groom[0]}</div><div><div class="couple-name">${i.bride} & ${i.groom}</div></div></div></td>
+    <td>${formatDate(i.weddingDate)}</td>
+    <td><span class="pkg-badge pkg-${i.package}">${cap(i.package)}</span></td>
+    <td>${i.rsvp} tamu</td>
+    <td>${statusBadge(i.status)}</td>
+  </tr>`;
+}
+
+// ── INVITATIONS ──
+function renderInvitations(filter) {
+  if(filter) currentFilter = filter;
+  const search = document.getElementById('search-input').value.toLowerCase();
+  let data = invitations;
+  if(currentFilter !== 'all') data = data.filter(i=>i.status===currentFilter);
+  if(search) data = data.filter(i=>(i.bride+i.groom+i.slug).toLowerCase().includes(search));
+
+  const tbody = document.getElementById('inv-table');
+  if(!data.length){
+    tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">💌</div><div class="empty-title">Belum ada undangan</div><div class="empty-sub">Klik "+ Buat Undangan" untuk memulai</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(i=>`
+    <tr>
+      <td><div class="couple-cell">
+        <div class="couple-initials">${i.bride[0]}${i.groom[0]}</div>
+        <div><div class="couple-name">${i.bride} & ${i.groom}</div>
+        <div class="couple-slug">${i.slug}</div></div>
+      </div></td>
+      <td>
+        <div class="link-cell">
+          <span class="link-text">${BASE_URL}/${i.slug}</span>
+          <button class="copy-btn" onclick="copyLink('${BASE_URL}/${i.slug}?to=Nama+Tamu')" title="Salin link">⧉</button>
+        </div>
+      </td>
+      <td>${formatDate(i.weddingDate)}</td>
+      <td><span class="pkg-badge pkg-${i.package}">${cap(i.package)}</span></td>
+      <td><span style="font-weight:500">${i.rsvp}</span> <span style="color:var(--text3)">tamu</span></td>
+      <td>${statusBadge(i.status)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="icon-btn" onclick="openModal('edit',${i.id})" title="Edit">✎</button>
+          <button class="icon-btn" onclick="shareLink(${i.id})" title="Bagikan WA">📤</button>
+          <button class="icon-btn" onclick="previewInv(${i.id})" title="Preview">👁</button>
+          <button class="icon-btn" style="color:var(--red)" onclick="deleteInv(${i.id})" title="Hapus">✕</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterStatus(s, el) {
+  document.querySelectorAll('#page-invitations .filter-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderInvitations(s);
+}
+
+function filterTable() { renderInvitations(); }
+
+// ── RSVP ──
+function renderRsvp() {
+  const total = rsvpData.length;
+  const hadir = rsvpData.filter(r=>r.hadir).length;
+  const tidak = total - hadir;
+  const pct = total ? Math.round((hadir/total)*100) : 0;
+  document.getElementById('rsvp-total').textContent = total;
+  document.getElementById('rsvp-hadir').textContent = hadir;
+  document.getElementById('rsvp-tidak').textContent = tidak;
+  document.getElementById('rsvp-pct').textContent = pct+'%';
+  document.getElementById('rsvp-bar-fill').style.width = pct+'%';
+
+  const tbody = document.getElementById('rsvp-table');
+  tbody.innerHTML = rsvpData.map(r=>`
+    <tr>
+      <td><span style="font-weight:500">${r.name}</span></td>
+      <td style="color:var(--text3)">${r.couple}</td>
+      <td>${r.hadir
+        ? '<span class="status-badge badge-active">Hadir</span>'
+        : '<span style="background:var(--red-bg);color:var(--red);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500">Tidak Hadir</span>'
+      }</td>
+      <td>${r.hadir ? r.count+' org' : '—'}</td>
+      <td style="color:var(--text3);font-style:italic;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.wish||'—'}</td>
+      <td style="color:var(--text3);font-size:12px">${r.time}</td>
+    </tr>
+  `).join('');
+
+  const wishes = rsvpData.filter(r=>r.wish);
+  document.getElementById('wish-cards').innerHTML = wishes.map(r=>`
+    <div class="guest-card">
+      <div class="guest-card-header">
+        <div class="guest-avatar">${r.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
+        <div><div class="guest-name-big">${r.name}</div><div class="guest-couple">${r.couple}</div></div>
+      </div>
+      <div class="guest-card-body">${r.wish}</div>
+      <div class="guest-card-footer">
+        ${r.hadir?'<span style="color:var(--green)">✓ Hadir</span>':'<span style="color:var(--red)">✗ Tidak Hadir</span>'}
+        · ${r.time}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── ORDERS ──
+function renderOrders(filter) {
+  if(filter) currentOrderFilter = filter;
+  let data = orders;
+  if(currentOrderFilter!=='all') data = data.filter(o=>o.status===currentOrderFilter);
+  const statusMap = {new:'Baru',process:'Diproses',done:'Selesai'};
+  const colorMap = {new:'var(--blue)',process:'var(--amber)',done:'var(--green)'};
+  const bgMap = {new:'var(--blue-bg)',process:'var(--amber-bg)',done:'var(--green-bg)'};
+
+  document.getElementById('order-table').innerHTML = data.map(o=>`
+    <tr>
+      <td style="font-family:monospace;font-size:12px;color:var(--gold)">${o.id}</td>
+      <td><div style="font-weight:500">${o.customer}</div><div style="font-size:11px;color:var(--text3)">${o.phone}</div></td>
+      <td><span class="pkg-badge pkg-${o.package}">${cap(o.package)}</span></td>
+      <td style="font-weight:500">${o.price}</td>
+      <td><span style="background:${bgMap[o.status]};color:${colorMap[o.status]};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500">${statusMap[o.status]}</span></td>
+      <td style="color:var(--text3);font-size:12px">${o.date}</td>
+      <td>
+        <div class="action-btns">
+          ${o.status==='new'?`<button class="btn btn-ghost btn-sm" onclick="processOrder('${o.id}')">Proses</button>`:''}
+          ${o.status==='process'?`<button class="btn btn-primary btn-sm" onclick="doneOrder('${o.id}')">Selesai</button>`:''}
+          <button class="icon-btn" onclick="waOrder('${o.id}')" title="WhatsApp">💬</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterOrder(s,el){
+  document.querySelectorAll('#page-orders .filter-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders(s);
+}
+
+function processOrder(id){
+  const o=orders.find(o=>o.id===id);
+  if(o){o.status='process';renderOrders();toast('Order '+id+' diproses');}
+}
+function doneOrder(id){
+  const o=orders.find(o=>o.id===id);
+  if(o){o.status='done';renderOrders();toast('Order '+id+' selesai ✓','success');}
+}
+function waOrder(id){
+  const o=orders.find(o=>o.id===id);
+  if(o) window.open('https://wa.me/'+o.phone.replace(/^0/,'62')+'?text=Halo+'+encodeURIComponent(o.customer)+',+pesanan+Anda+sudah+diproses!');
+}
+
+// ── TEMPLATES ──
+function renderTemplates(){
+  const templates=[
+    {name:'Motion Art Gold',theme:'Dark Elegant',color:'#C9A96E'},
+    {name:'Garden Floral',theme:'Light Romantic',color:'#D4916A'},
+    {name:'Minimalist White',theme:'Clean Modern',color:'#888'},
+    {name:'Batik Heritage',theme:'Cultural Classic',color:'#8B4513'},
+  ];
+  document.querySelector('#page-templates div').innerHTML = templates.map(t=>`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:border-color 0.2s"
+      onmouseover="this.style.borderColor='${t.color}'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="height:140px;background:linear-gradient(135deg,var(--surface2) 0%,var(--bg) 100%);display:flex;align-items:center;justify-content:center;font-size:32px;border-bottom:1px solid var(--border)">
+        💌
+      </div>
+      <div style="padding:16px">
+        <div style="font-weight:500;margin-bottom:4px">${t.name}</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">${t.theme}</div>
+        <button class="btn btn-ghost btn-sm" style="width:100%">Gunakan Template</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── SETTINGS ──
+function showSettingsPanel(name,el){
+  document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  ['brand','domain','pricing','notif','account'].forEach(p=>{
+    const el=document.getElementById('settings-'+p);
+    if(el) el.style.display=p===name?'block':'none';
+  });
+}
+
+// ── MODAL ──
+function openModal(mode, id){
+  editingId = null;
+  if(mode==='edit' && id){
+    const inv = invitations.find(i=>i.id===id);
+    if(!inv) return;
+    editingId = id;
+    document.getElementById('modal-title').textContent = 'Edit Undangan – '+inv.bride+' & '+inv.groom;
+    document.getElementById('f-bride').value = inv.bride;
+    document.getElementById('f-groom').value = inv.groom;
+    document.getElementById('f-slug').value = inv.slug;
+    document.getElementById('f-akad-date').value = inv.weddingDate;
+    document.getElementById('f-resepsi-date').value = inv.weddingDate;
+    document.getElementById('f-package').value = inv.package;
+  } else {
+    document.getElementById('modal-title').textContent = 'Buat Undangan Baru';
+    document.getElementById('modal-form').querySelectorAll('input,textarea,select').forEach(el=>{
+      if(el.tagName==='SELECT') el.selectedIndex=0;
+      else el.value='';
+    });
+  }
+  updatePreview();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOutside(e){ if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+
+function updatePreview(){
+  const slug = document.getElementById('f-slug').value.trim()||'slug-url';
+  document.getElementById('preview-url').textContent = `${BASE_URL}/${slug}?to=Nama+Tamu`;
+}
+
+function saveInvitation(status){
+  const bride = document.getElementById('f-bride').value.trim();
+  const groom = document.getElementById('f-groom').value.trim();
+  const slug = document.getElementById('f-slug').value.trim();
+  const pkg = document.getElementById('f-package').value;
+  const date = document.getElementById('f-akad-date').value;
+
+  if(!bride||!groom){ toast('Nama mempelai wajib diisi','error'); return; }
+  if(!slug){ toast('Slug URL wajib diisi','error'); return; }
+
+  if(editingId){
+    const inv = invitations.find(i=>i.id===editingId);
+    if(inv){ Object.assign(inv,{bride,groom,slug,package:pkg,weddingDate:date,status}); }
+    toast('Undangan berhasil diperbarui ✓','success');
+  } else {
+    const newInv = {
+      id: Date.now(), bride, groom, slug,
+      weddingDate: date||'2026-01-01',
+      package: pkg, status,
+      rsvp: 0, views: 0,
+      createdAt: new Date().toISOString().slice(0,10)
+    };
+    invitations.unshift(newInv);
+    document.getElementById('inv-badge').textContent = invitations.length;
+    toast(status==='active'?'Undangan aktif! Link siap dibagikan 🎉':'Tersimpan sebagai draft','success');
+  }
+  closeModal();
+  renderInvitations();
+  renderOverview();
+}
+
+// ── ACTIONS ──
+function deleteInv(id){
+  if(!confirm('Hapus undangan ini?')) return;
+  invitations = invitations.filter(i=>i.id!==id);
+  renderInvitations();
+  renderOverview();
+  document.getElementById('inv-badge').textContent = invitations.length;
+  toast('Undangan dihapus');
+}
+
+function copyLink(url){
+  navigator.clipboard.writeText(url).then(()=>toast('Link disalin ✓','success'));
+}
+
+function shareLink(id){
+  const inv = invitations.find(i=>i.id===id);
+  if(!inv) return;
+  const msg = `Halo! Undangan digital ${inv.bride} & ${inv.groom} sudah siap 🎉\n\nLink: ${BASE_URL}/${inv.slug}?to=Nama+Tamu\n\nGanti "Nama+Tamu" dengan nama tamu masing-masing.`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg));
+}
+
+function previewInv(id){
+  const inv = invitations.find(i=>i.id===id);
+  if(inv) window.open(`${BASE_URL}/${inv.slug}?to=Preview`,'_blank');
+}
+
+function exportRsvp(){
+  const rows = [['Nama','Undangan','Hadir','Jumlah','Pesan','Waktu']];
+  rsvpData.forEach(r=>rows.push([r.name,r.couple,r.hadir?'Ya':'Tidak',r.count,r.wish,r.time]));
+  const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='rsvp-export.csv';
+  a.click();
+  toast('Export CSV berhasil ⬇','success');
+}
+
+// ── HELPERS ──
+function statusBadge(s){
+  const map={active:'badge-active',draft:'badge-draft',expired:'badge-expired'};
+  const label={active:'Aktif',draft:'Draft',expired:'Kadaluarsa'};
+  return `<span class="status-badge ${map[s]}">${label[s]}</span>`;
+}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function formatDate(d){
+  if(!d) return '—';
+  const months=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const dt=new Date(d);
+  return `${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
+}
+
+function toast(msg,type='info'){
+  const el=document.getElementById('toast');
+  const icon=document.getElementById('toast-icon');
+  const msgEl=document.getElementById('toast-msg');
+  icon.textContent = type==='success'?'✓':type==='error'?'✕':'ℹ';
+  icon.style.color = type==='success'?'var(--green)':type==='error'?'var(--red)':'var(--gold)';
+  msgEl.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ── INIT ──
+renderOverview();
+</script>
+</body>
+</html>
